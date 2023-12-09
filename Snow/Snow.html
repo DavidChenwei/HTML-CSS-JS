@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            height: 100vh; 
+
+        }
+        .bg{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url(img/background.jpg);
+            background-size: cover;
+            z-index: -10; 
+        }
+        h1{
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-42%,-50%);
+           font-family: 'fangsong';
+           font-size: 6em; 
+           color: rgba(255, 255, 255, 0.5);
+            text-shadow: 0  0 10px rgb(255,255,255);
+        }
+    </style>
+</head>
+<body>
+    <h1>Aurora Snow</h1>
+    <div class="bg"></div>
+    <canvas id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var x = 0 ,y=0;      
+        var arr=[];
+        var num=600;
+          
+      window.onresize=resizeCanvas;
+        function resizeCanvas(){
+            x=canvas.width=window.innerWidth;
+            y=canvas.height=window.innerHeight;
+        }
+        resizeCanvas(); 
+
+        for(let i=0;i<num;i++){
+            arr.push({
+                x: x*Math.random(),
+                y: y*Math.random(),
+                r: Math.random()*5,
+                color:`rgba(255,255,255,${Math.random()})`
+            })
+        }
+        var img = new Image();
+        img.src = "img/snow.png";
+        function draw(){
+            for(let i=0;i<num;i++){
+                var dots = arr[i];        
+                 ctx.beginPath();
+                 ctx.fillStyle = dots.color;
+                ctx.arc(dots.x,dots.y,dots.r,0,2*3.14,false);       
+                if(i%20==0){
+                ctx.drawImage(img,dots.x,dots.y,dots.r*10,dots.r*10);
+                }
+                ctx.fill();
+            }
+        }
+          
+        function updated() {
+            for(let i=0;i<num;i++){
+                var dots = arr[i];
+                dots.x = dots.x + 0.1; 
+                dots.y = dots.y+dots.r/2;
+                if(dots.y>y){
+                   arr[i]={ x: x*Math.random(),
+                y: -10,
+                r: Math.random()*5,
+                color:`rgba(255,255,255,${Math.random()})`}
+                 }
+            }
+   
+        }
+        setInterval(function(){
+            ctx.clearRect(0,0,x,y);
+            draw();
+            updated(); 
+        },10)
+
+      
+
+    </script>
+</body>
+</html>
