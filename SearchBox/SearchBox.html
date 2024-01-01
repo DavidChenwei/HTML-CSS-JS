@@ -362,8 +362,8 @@
                         </ul>
                     </div>
                 </div>
-                <form>
-                    <input aria-label="Enter Origin Username" placeholder="Enter Origin Username" type="search">
+                <form id="searchForm">
+                    <input name="HeroName" placeholder="Enter Origin Username" type="search">
                 </form>
             </div>
         </div>
@@ -395,6 +395,7 @@
         });
 
         function changeSVGContent(clickedItem) {
+            clearDropItemActive()
             var newPathContent = clickedItem.querySelector('svg path').getAttribute('d');
             var newviewBox = clickedItem.querySelector('svg').getAttribute('viewBox');
             document.querySelector('.titles-dropdown .value svg path').setAttribute('d', newPathContent);
@@ -403,21 +404,41 @@
             if (dropdownShownElement) {
                 dropdownShownElement.classList.remove('dropdown--shown');
             }
+            clickedItem.classList.toggle('active')
         }
 
         function changePlatFromSVGContent(clickedItem) {
+            clearDropItemActive()
             var newPathContent = clickedItem.querySelector('svg path').getAttribute('d');
             var newviewBox = clickedItem.querySelector('svg').getAttribute('viewBox');
             document.querySelector('.platforms-dropdown .value svg path').setAttribute('d', newPathContent);
             document.querySelector('.platforms-dropdown .value svg').setAttribute('viewBox', newviewBox);
             var dropdownShownElement = document.querySelector('.dropdown--shown');
             if (dropdownShownElement) {
-                console.log(dropdownShownElement)
                 dropdownShownElement.classList.remove('dropdown--shown');
-                console.log(dropdownShownElement)
+                clickedItem.classList.toggle('active')
             }
         }
 
+        function clearDropItemActive() {
+            var lis = document.querySelectorAll('.dropdown__items .dropdown__item');
+            lis.forEach(function (li) {
+                li.classList.remove('active');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var dropdownItems = document.querySelectorAll('.platforms-dropdown .dropdown__items .dropdown__item');
+
+            dropdownItems.forEach(function (item) {
+                item.addEventListener('click', function () {
+                    var spanValue = item.querySelector('span').textContent;
+                    var inputElement = document.querySelector('#searchForm input[name="HeroName"]');
+
+                    inputElement.placeholder = 'Enter ' + spanValue + ' Username';
+                });
+            });
+        });
 
     </script>
 </body>
